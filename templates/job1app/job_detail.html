@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} {{ job.title }} {% endblock %}
+
+{% block content %}
+
+    <div class="container mt-5" style="width: 70%;">
+    <div class="upper-content">
+        <div class="text-center">
+             {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+             <li style="list-style-type: none;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+
+        <h3 class="mb-3">{{ job.title|title }}</h3>
+        <a href="" style="text-decoration: none;"><h5>{{ job.organization|title }}</h5></a>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+  <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+</svg>
+        <span style="font-weight: bold; margin-right:15px ;">{{ job.location|title }}</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
+  <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
+</svg>
+        <span style="font-weight: bold; margin-right:15px">{{ job.created|timesince }} ago</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash" viewBox="0 0 16 16">
+  <path d="M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+  <path d="M0 4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V4zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V6a2 2 0 0 1-2-2H3z"/>
+</svg>
+        <span style="font-weight: bold;">{{ job.salary}}</span>
+        </div>
+        <button class="btn btn-success mt-4 px-4" style="width: 100%;" data-bs-toggle="modal" data-bs-target="#apply"><h4>Apply</h4></button>
+
+    </div>
+
+<!-- Modal -->
+<div class="modal fade" id="apply" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Apply</h5>
+          <hr>
+        <button type="button"  class="btn-close" data-bs-dismiss="modal" aria-label="Close" value="{{ job.slug }}"></button>
+      </div>
+      <div class="modal-body">
+          <form action="{% url 'apply' %}" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="row">
+                  <div class="col-md-6">
+              <input type="text" name="first_name" placeholder="first name" class="form-control" style="height:45px;">
+                  </div>
+              <div class="col-md-6">
+              <input type="text" name="last_name" placeholder="last name" class="form-control" style="height: 45px">
+              </div>
+                  <div class="col-md-12 mt-4">
+                  <input type="email" name="email" required placeholder="email" class="form-control" style="height: 45px">
+                  </div>
+
+                  <div class="col-md-12 mt-4">
+                      <input type="file" required name="file" id="" class="form-control">
+                  </div>
+                  <div class="modal-footer">
+{#                      <input type="submit" name="apply" value="{{ job.slug }}"class="btn btn-success" style="width: 100%;" value="Apply">#}
+                        <button name="apply" value="{{ job.slug }}" class="btn btn-success" style="width: 100%">Apply</button>
+                  </div>
+              </div>
+          </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+    <div class="description m-4">
+        <h4 style="font-weight: bold">Description</h4>
+        <hr>
+        <h5 style="display: inline">Apply Before:</h5> <p style="display: inline; font-size:18px;">{{ job.apply_before }}</p><br><br>
+        <h5 style="display: inline">Education Level:</h5> <p style="display: inline; font-size:18px;">{{ job.education_level }}</p><br><br>
+        <h5 style="display: inline">No of Vacancy:</h5> <p style="display: inline; font-size:18px;">{{ job.no_of_vacancy }}</p><br><br>
+        <h5 style="display: inline">Experience: </h5> <p style="display: inline; font-size:18px;">{{ job.experience }}</p><br><br>
+        <h5>Job Specification</h5>
+            {{ job.specification|safe }}<br>
+        <h5>Technical Requirements</h5>
+            {{ job.requirement|safe }}<br>
+        <h5>Benefits</h5>
+            {{ job.benefit|safe }}
+    </div>
+    </div>
+
+
+{% endblock %}
