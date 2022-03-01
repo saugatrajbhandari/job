@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'job1app',
     'users',
+    'contact',
     'ckeditor',
     'django_celery_results',
 ]
@@ -123,6 +124,7 @@ EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_TO = os.environ.get('EMAIL_TO')
+
 
 MEDIA_ROOT = 'media'
 MEDIA_URL = '/media/'

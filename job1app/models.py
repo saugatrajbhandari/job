@@ -3,6 +3,12 @@ from django.utils.text import slugify
 from django.urls import reverse
 
 from ckeditor.fields import RichTextField
+from django.contrib.contenttypes.models import ContentType
+
+
+class JobActiveManager(models.Manager):
+    def get_queryset(self):
+        return super(JobActiveManager, self).get_queryset().filter(is_active=True)
 
 
 class Category(models.Model):
@@ -42,6 +48,9 @@ class Job(models.Model):
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    objects = models.Manager()
+    active = JobActiveManager()
 
     def save(self, *args, **kwargs):
         if not self.slug:

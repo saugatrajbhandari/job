@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %} contact {% endblock %}
+
+{% block content %}
+
+    <div class="container text-center">
+        <div class="col-md-7 mt-4" style="height: 200px; margin: 0 auto;">
+            {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+             <li style="list-style-type: none;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+            {% endfor %}
+        </ul>
+    {% endif %}
+            <h4 class="text-center">GET IN TOUCH</h4>
+            <form method="POST" class="mt-4">
+                {% csrf_token %}
+                <div class="form-group m-4">
+                    <input type="text" class="form-control form-control-lg" name="name" id="" placeholder="Name" required>
+                </div>
+                <div class="form-group m-4">
+                    <input type="email" class="form-control form-control-lg " name="email" id="" placeholder="Email" required>
+                </div>
+
+                <div class="form-group m-4">
+                    <textarea class="form-control form-control-lg" placeholder="Message" name="message" id="" cols="10" rows="4"></textarea>
+                </div>
+
+                <input type="submit" class="btn btn-primary btn-lg px-5 " value="Send">
+
+            </form>
+        </div>
+    </div>
+
+
+{% endblock content %}
