@@ -3,29 +3,36 @@
 
 {% block content %}
 
-    <div class="container">
+    <div class="container"
+         x-data="{ tag:'ALL', jobs:[]}"
+         x-init="jobs = await (await fetch('/job-list')).json()"
+    >
 
-      <form action="" class="m-3">
-          <input type="text" name="" id="" class="form-control" style="width: 70%;" placeholder="search...">
+      <form action="{% url 'search' %}" class="m-3">
+          <input type="text" name="q" id="" class="form-control" style="width: 70%;" placeholder="search...">
       </form>
 
-      <main>
+    {% for tag in tags %}
+        <button type="button" class="btn btn-primary btn-sm" @click="tag = $el.textContent">{{ tag.name }}</button>
+    {% endfor %}
+        <button type="button" class="btn btn-primary btn-sm" @click="tag = $el.textContent">ALL</button>
 
+
+
+    <template x-for="job in jobs.filter(f => tag === 'ALL' || f.tags.includes(tag))">
+      <main class="m-3">
           <div class="col-md-12" style="display: flex;">
         <section class="col-md-7 main-left-section" style=";">
-
-            {% for job in job %}
-                <a href="{{ job.get_absolute_url }}" class="list">
+                <a  type="button"  x-bind:href=" 'detail' + '/' + job.slug" class="list">
                 <div class="m-4 border p-3">
-                <h4>{{ job.title|title }} </h4>
+                    <h4 x-text="job.title"></h4>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-building" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"/>
   <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"/>
-                </svg><span class="p-1 m-1"><b>{{ job.organization|title }}</b></span> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                </svg><span class="p-1 m-1"><b x-text="job.organization"></b></span> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
   <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-</svg><span class="p-1"><b>{{ job.location|title }}</b></span>
+</svg><span class="p-1"><b x-text="job.location"></b></span>
                 </div>
-            {% endfor %}
                 </a>
 
         </section>
@@ -36,7 +43,7 @@
     </div>
 
       </main>
-
+    </template>
 
     </div>
 

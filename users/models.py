@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import (PermissionsMixin, AbstractBaseUser,
                                         BaseUserManager)
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 class CustomUserManager(BaseUserManager):
@@ -43,4 +45,13 @@ class User(PermissionsMixin, AbstractBaseUser):
 
     def get_full_name(self):
         return self.first_name + " " + self.last_name
+
+    def email_user(self, subject, message):
+        send_mail(
+            subject,
+            message,
+            settings.EMAIL_HOST_USER,
+            [self.email],
+            fail_silently=False,
+        )
 

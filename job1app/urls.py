@@ -1,11 +1,14 @@
 from django.urls import path
-from .views import home, job_detail, apply, job_category, internship_category
-
+from .views import (HomeView, JobCategoryView,
+                    apply, InternshipCategoryView, search,
+                    JobList, JobDetailView)
 
 urlpatterns = [
-    path('', home, name='home'),
-    path('detail/<slug:slug>', job_detail, name="job-detail"),
+    path('', HomeView.as_view(), name='home'),
+    path('detail/<slug:slug>', JobDetailView.as_view(), name="job-detail"),
     path('apply/', apply, name='apply'),
-    path('jobs/', job_category, name='job-category'),
-    path('internships/', internship_category, name='internship-category'),
+    path('jobs/', JobCategoryView.as_view(), name='job-category'),
+    path('internships/', InternshipCategoryView.as_view(), name='internship-category'),
+    path('search/', search, name='search'),
+    path('job-list/', JobList.as_view(), name='job-list'),
 ]

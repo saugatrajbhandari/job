@@ -1,36 +1,52 @@
+from django.conf import settings
+from django.contrib import messages
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import render_to_string
+from taggit.models import Tag
+from rest_framework.generics import ListAPIView
+
 from .models import Category, Job
-from django.http import HttpResponse
-from django.contrib import messages
-from django.core.mail import EmailMessage
-from django.conf import settings
-from django.core.files import File
 from .tasks import send_email
-import json
-from pathlib import Path
-from django.core.files.storage import FileSystemStorage
+from .serializers import JobSerializer
+from django.views.generic import (TemplateView, ListView, DetailView)
 
 
+class HomeView(TemplateView):
+    template_name = 'job1app/home.html'
 
-def home(request):
-    job = Job.active.all()
-    return render(request, 'job1app/home.html', {'job': job})
-
-
-def job_category(request):
-    jobs = Job.objects.filter(category__name='job', is_active=True)
-    return render(request, 'job1app/job_category.html', {'jobs': jobs})
+    def get_context_data(self, **kwargs):
+        context = super(HomeView, self).get_context_data(**kwargs)
+        context['tags'] = Tag.objects.all()
+        return context
 
 
-def internship_category(request):
-    internships = Job.objects.filter(category__name='internship', is_active=True)
-    return render(request, 'job1app/internship_category.html', {'internships': internships})
+class JobList(ListAPIView):
+    queryset = Job.active.all()
+    serializer_class = JobSerializer
 
 
-def job_detail(request, slug):
-    job = get_object_or_404(Job, slug=slug)
-    return render(request, 'job1app/job_detail.html', {'job': job})
+class JobCategoryView(ListView):
+    template_name = 'job1app/job_category.html'
+    context_object_name = 'jobs'
+
+    def get_queryset(self):
+        return Job.objects.filter(category__name='job', is_active=True)
+
+
+class InternshipCategoryView(ListView):
+    template_name = 'job1app/internship_category.html'
+    context_object_name = 'internships'
+
+    def get_queryset(self):
+        return Job.objects.filter(category__name='internship', is_active=True)
+
+
+class JobDetailView(DetailView):
+    model = Job
+    context_object_name = 'job'
+    template_name = 'job1app/job_detail.html'
 
 
 def apply(request):
@@ -62,3 +78,21 @@ def apply(request):
         return redirect('job-detail', slug=slug)
 
     return render(request, 'job1app/job_detail.html')
+
+
+def search(request):
+    home_search_text = request.GET.get('q')
+    if home_search_text:
+        qs = Job.objects.filter(title__icontains=home_search_text)
+
+    job_category_text = request.GET.get('r')
+    if job_category_text:
+        job_category = Category.objects.get(name='job')
+        qs = job_category.category.filter(title__icontains=job_category_text)
+
+    internship_category_text = request.GET.get('s')
+    if internship_category_text:
+        internship_category = Category.objects.get(name='internship')
+        qs = internship_category.category.filter(title__icontains=internship_category_text)
+
+    return render(request, 'job1app/search.html', {'qs': qs})

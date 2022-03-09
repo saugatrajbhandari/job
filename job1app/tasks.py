@@ -7,8 +7,6 @@ from django.conf import settings
 
 @shared_task(bind=True)
 def send_email(self, email_from, message, fileurl):
-    print(type(settings.BASE_DIR))
-    print(str(settings.BASE_DIR) + fileurl)
     f = str(settings.BASE_DIR) + fileurl
     file = open(f, "rb")
     email = EmailMessage('New application received', message, settings.EMAIL_HOST_USER,

@@ -1,9 +1,10 @@
 from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
-
-from ckeditor.fields import RichTextField
 from django.contrib.contenttypes.models import ContentType
+
+from taggit.managers import TaggableManager
+from ckeditor.fields import RichTextField
 
 
 class JobActiveManager(models.Manager):
@@ -45,10 +46,10 @@ class Job(models.Model):
     is_paid = models.BooleanField(default=True, help_text="for internship only")
     duration = models.CharField(max_length=255, blank=True, null=True, help_text="for internship only")
     additional_benefits = models.BooleanField(blank=True, null=True)
+    tags = TaggableManager()
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-
     objects = models.Manager()
     active = JobActiveManager()
 
