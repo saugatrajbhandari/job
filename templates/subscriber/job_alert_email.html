@@ -1,0 +1,7 @@
+{% autoescape off %}
+Hi,
+
+    {{ current_site.domain }}/detail/{{ slug }}
+<a href="{% url 'job-detail' slug %}">detail</a>
+
+{% endautoescape %}

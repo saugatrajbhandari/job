@@ -9,6 +9,7 @@ urlpatterns = [
     path('', include('job1app.urls')),
     path('accounts/', include('users.urls')),
     path('contact', include('contact.urls')),
+    path('subscriber/', include('subscriber.urls')),
     # path('accounts/', include('allauth.urls')),
 
 ]

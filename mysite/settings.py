@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'job1app',
     'users',
     'contact',
+    'subscriber.apps.SubscriberConfig',
     'ckeditor',
     'django_celery_results',
     'taggit',

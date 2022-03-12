@@ -1,0 +1,24 @@
+<div class="subscribe text-center mt-5 mb-5" style="margin: 0 auto">
+	<h2 class="subscribe__title">Let's keep in touch</h2>
+	<p class="subscribe__copy">Subscribe to keep up with fresh Jobs and exciting <updates></updates></p>
+	{% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <div class="alert alert-danger" style="width: 100%;">
+             <li style="list-style-type: none;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+
+</div>
+
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form class="form" method="post" action="{% url 'subscriber' %}">
+         {% csrf_token %}
+		<input type="email" class="form__email" placeholder="Enter your email address" name="email"/>
+		<button class="form__button">Subscribe</button>
+	</form>
+    {#	<div class="notice">#}
+    {#		<input type="checkbox">#}
+    {#		<span class="notice__copy">I agree to my email address being stored and uses to recieve monthly newsletter.</span>#}
+    {#	</div>#}
+</div>
