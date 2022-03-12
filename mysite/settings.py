@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django_celery_results',
     'taggit',
     'rest_framework',
+    'widget_tweaks',
 
     'allauth',
     'allauth.account',

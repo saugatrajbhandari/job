@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import (user_register, account_activate, LogoutView)
+from .views import (user_register, account_activate, LogoutView, check_email)
 from .forms import UserLoginForm
 
 urlpatterns = [
@@ -10,3 +10,9 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('activate/<slug:uidb64>/<slug:token>)/', account_activate, name='activate'),
 ]
+
+htmx_urlpatterns = [
+    path('check_email/', check_email, name='check_email')
+]
+
+urlpatterns += htmx_urlpatterns

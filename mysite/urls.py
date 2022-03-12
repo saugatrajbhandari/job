@@ -9,7 +9,7 @@ urlpatterns = [
     path('', include('job1app.urls')),
     path('accounts/', include('users.urls')),
     path('contact', include('contact.urls')),
-    path('accounts/', include('allauth.urls')),
+    # path('accounts/', include('allauth.urls')),
 
 ]
 if settings.DEBUG:

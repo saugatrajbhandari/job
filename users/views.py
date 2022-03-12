@@ -9,18 +9,21 @@ from .models import User
 from .forms import (UserRegistrationForm, )
 from django.contrib.auth.views import LogoutView as Logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import get_user_model
+from asgiref.sync import sync_to_async
+import asyncio
 
 
-def user_register(request):
+async def user_register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
-        if form.is_valid():
+        if await sync_to_async(form.is_valid)():
             user = form.save(commit=False)
             user.email = form.cleaned_data['email']
             user.set_password(form.cleaned_data['password'])
             user.is_active = False
-            user.save()
-            current_site = get_current_site(request)
+            await sync_to_async(user.save)()
+            current_site = await sync_to_async(get_current_site)(request)
             subject = 'Activate your Account'
             message = render_to_string('accounts/registration/account_activation_email.html',
                                        {
@@ -28,9 +31,11 @@ def user_register(request):
                                            'domain': current_site.domain,
                                            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                                            'token': account_activation_token.make_token(user),
-                                       })
-            user.email_user(subject=subject, message=message)
-            return HttpResponse('registered succesfully and activation sent')
+                                           })
+            send_email = sync_to_async(user.email_user)
+            asyncio.create_task(send_email(subject=subject, message=message))
+            # user.email_user(subject=subject, message=message)
+            return HttpResponse('registered successfully and activation sent')
 
     else:
         form = UserRegistrationForm()
@@ -54,3 +59,11 @@ def account_activate(request, uidb64, token):
 
 class LogoutView(LoginRequiredMixin, Logout):
     pass
+
+
+def check_email(request):
+    email = request.POST.get('email')
+    if get_user_model().objects.filter(email=email).exists():
+        return HttpResponse("<div style='color:red;'>Email already exists </div>")
+    else:
+        return HttpResponse("<div style='color:green;'>Email is available </div>")
