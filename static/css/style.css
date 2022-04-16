@@ -71,3 +71,20 @@
 	width: 345px;
 }
 
+.card-wrapper{
+	margin-top: 1rem;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-column-gap: 2rem;
+	grid-row-gap: 4rem;
+
+}
+
+.my-card{
+	width: 350px!important;
+}
+
+.company_website:hover{
+	text-decoration: underline;
+	transition: all .3s ease;
+}

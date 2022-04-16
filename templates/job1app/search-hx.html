@@ -1,0 +1,11 @@
+<form>
+        {% csrf_token %}
+            <input type="text" name="q" id="" class="form-control"
+                   style="width: 70%;" placeholder="search..."
+                   hx-post= "{% url 'search' %}"
+                   hx-trigger="keyup changed delay:500ms"
+                   hx-target="#content"
+            >
+</form>
+
+<div id="content"></div>

@@ -26,10 +26,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'job1app',
-    'users',
-    'contact',
+    'django.contrib.humanize',
+
+    'job1app.apps.Job1AppConfig',
+    'users.apps.UsersConfig',
+    'contact.apps.ContactConfig',
     'subscriber.apps.SubscriberConfig',
+    'salaries.apps.SalariesConfig',
+    'company.apps.CompanyConfig',
+    
+    
     'ckeditor',
     'django_celery_results',
     'taggit',

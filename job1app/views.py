@@ -4,17 +4,21 @@ from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import render_to_string
+from django.views.generic import (TemplateView, ListView, DetailView)
+from django.core.paginator import Paginator
+
 from taggit.models import Tag
 from rest_framework.generics import ListAPIView
 
 from .models import Category, Job
 from .tasks import send_email
 from .serializers import JobSerializer
-from django.views.generic import (TemplateView, ListView, DetailView)
 
 
-class HomeView(TemplateView):
+class HomeView(ListView):
     template_name = 'job1app/home.html'
+    context_object_name = 'jobs'
+    model = Job
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
@@ -30,6 +34,7 @@ class JobList(ListAPIView):
 class JobCategoryView(ListView):
     template_name = 'job1app/job_category.html'
     context_object_name = 'jobs'
+    paginate_by = 5
 
     def get_queryset(self):
         return Job.objects.filter(category__name='job', is_active=True)
@@ -38,6 +43,7 @@ class JobCategoryView(ListView):
 class InternshipCategoryView(ListView):
     template_name = 'job1app/internship_category.html'
     context_object_name = 'internships'
+    paginate_by = 5
 
     def get_queryset(self):
         return Job.objects.filter(category__name='internship', is_active=True)
@@ -82,6 +88,7 @@ def apply(request):
 
 def search(request):
     home_search_text = request.GET.get('q')
+    print(home_search_text)
     if home_search_text:
         qs = Job.objects.filter(title__icontains=home_search_text)
 

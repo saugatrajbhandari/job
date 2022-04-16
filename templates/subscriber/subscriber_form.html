@@ -4,10 +4,14 @@
 	{% if messages %}
         <ul class="messages">
             {% for message in messages %}
-            <div class="alert alert-danger" style="width: 100%;">
+                {% if message.tags == "info" %}
+                    <div class="alert alert-warning" style="width: 100%;">
              <li style="list-style-type: none;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
 
 </div>
+
+                {% endif %}
+
 
             {% endfor %}
         </ul>

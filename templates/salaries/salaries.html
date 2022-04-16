@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}
+
+{% endblock %}
+
+
+
+{% block content %}
+
+    <div class="container my-5">
+
+
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+             <li style="list-style-type: none;" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+
+        <div class="post-salary text-center">
+            <h3 class="text-center">Post your salary anonymously</h3>
+            <p style="width: 80%; margin: 0 auto; text-align: center;">Your small steps makes huge impact in the community.🙌 Disclose your salary anonymously and help to bring transparency in the market.😇😇</p>
+        </div>
+        <div style="display: flex; justify-content: center">
+        <button class="btn  btn-primary my-3" type="button" data-bs-toggle="modal" data-bs-target="#salary">Post salary anonymously</button>
+        </div>
+        {% include 'salaries/utils/salary-post.html' %}
+
+
+    <div class="container card-wrapper my-3">
+
+    {% for salary in page_obj %}
+
+        <div class="card my-card">
+                <div class="card-title text-center mt-3"><h6 style="font-family: Monospace; font-size: 20px;">{{ salary.role|upper }}</h6></div>
+
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6 style="font-weight: bold;">Salary</h6>
+                        <b style="color:#2FC86B">Rs {{ salary.salary|intcomma }} per month</b>
+                    </div>
+
+                    <div>
+                        <h6 style="font-weight: bold; margin: 0;">Company</h6>
+                        <p style="font-weight: 600;" class="text-primary company_website">
+                            <a href="{{ salary.company_website }}"
+                               target="_blank"
+                               style="text-decoration: none;">{{ salary.company_name|title }}</a></p>
+                    </div>
+
+                    <div>
+                        <h6 style="font-weight: bold; margin: 0;">Position</h6>
+                        <p style="font-weight: 600;">{{ salary.get_position_display|title }}</p>
+                    </div>
+
+                    <div>
+                        <h6 style="font-weight: bold; margin: 0;">Employee Status</h6>
+                        <p style="font-weight: 600;">{{ salary.get_employee_status_display|title }}</p>
+                    </div>
+
+                    <div>
+                        <h6 style="font-weight: bold; margin: 0;">Years of experience</h6>
+                        <p style="font-weight: 600;">{{ salary.get_experience_display|title }}</p>
+                    </div>
+
+                    <div>
+                        <h6 style="font-weight: bold; margin: 0;">Gender</h6>
+                        <p style="font-weight: 600;">{{ salary.get_gender_display|title }}</p>
+                    </div>
+
+
+                </div>
+
+
+        </div>
+
+    {% endfor %}
+
+    <nav aria-label="Page navigation example">
+  <ul class="pagination">
+
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+            </a>
+            </li>
+        {% endif %}
+
+  {% for i in page_obj.paginator.page_range %}
+      {% if page_obj.number == i %}
+        <li class="active page-item"><span class="page-link">{{ i }} </span></li>
+      {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+        <span class="sr-only">Next</span>
+      </a>
+    </li>
+    {% endif %}
+
+  </ul>
+</nav>
+
+    </div>
+
+
+{% endblock %}
