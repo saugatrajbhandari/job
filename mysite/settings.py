@@ -41,11 +41,6 @@ INSTALLED_APPS = [
     'taggit',
     'rest_framework',
     'widget_tweaks',
-
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
 ]
 
 
