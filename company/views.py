@@ -20,4 +20,4 @@ class JobPostView(LoginRequiredMixin, CreateView):
         if not self.request.user.is_superuser:
             messages.warning(request, 'You must be a superuser to post a job')
             return redirect('/')
-        super(JobPostView, self).dispatch(*args, **kwargs)
+        return super(JobPostView, self).dispatch(request, *args, **kwargs)
