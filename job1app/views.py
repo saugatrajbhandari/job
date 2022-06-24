@@ -37,7 +37,7 @@ class JobCategoryView(ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        return Job.objects.filter(category__name='job', is_active=True)
+        return Job.objects.filter(category__name='Job', is_active=True)
 
 
 class InternshipCategoryView(ListView):
@@ -46,7 +46,7 @@ class InternshipCategoryView(ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        return Job.objects.filter(category__name='internship', is_active=True)
+        return Job.objects.filter(category__name='Internship', is_active=True)
 
 
 class JobDetailView(DetailView):

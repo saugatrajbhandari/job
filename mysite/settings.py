@@ -25,7 +25,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
     'django.contrib.humanize',
 
     'job1app.apps.Job1AppConfig',
@@ -35,6 +34,8 @@ INSTALLED_APPS = [
     'salaries.apps.SalariesConfig',
     'company.apps.CompanyConfig',
     
+
+    'django_extensions',
     
     'ckeditor',
     'django_celery_results',
